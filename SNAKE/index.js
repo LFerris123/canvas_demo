@@ -36,7 +36,7 @@ var food = null;
 // 随机食物
 function RamdomFood(){
     food = new Food();
-    if(snake.isBody(food)){
+    if(snake.isBody()){
         RamdomFood();
     }else{
         food.color = "#f00";
