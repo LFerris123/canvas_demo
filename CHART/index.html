@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./CHART.js"></script>
+</head>
+<body>
+    <script>
+        let statics = {
+            title: "年龄统计图",
+            data:[
+                {
+                    name:"0-20岁人数",
+                    num:6
+                },{
+                    name:"20-40岁人数",
+                    num:50
+                },{
+                    name:"40-60岁人数",
+                    num:20
+                },{
+                    name:"60岁以上人数",
+                    num:4
+                }
+            ]
+        }
+        new CHART(statics,0,0,400,0);
+        new CHART(statics,0,450,400,1);
+    </script>
+</body>
+</html>
