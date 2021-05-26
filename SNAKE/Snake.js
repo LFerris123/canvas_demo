@@ -22,6 +22,13 @@ class Snake{
         raf = requestAnimationFrame(function run(){
             ctx.clearRect(0,0,canvas.width,canvas.height);
             this_.update();
+            if(this.isBump()){
+                alert(`得分为${score}`);
+                score = 0;
+                Score.innerText = score;
+                Reset.click();
+                return;
+             }
             this_.draw();
             food.draw();
             raf = requestAnimationFrame(run);
@@ -66,21 +73,14 @@ class Snake{
             this.tails.push(food);
             this.updateSpeed();
             RamdomFood();
-        }else{
-            if(this.isBump()){
-                alert(`得分为${score}`);
-                Reset.click();
-                score = 0;
-                Score.innerText = score;
-            }
         }
     }
 
-    // 判断part是否是蛇身/蛇头
-    isBody(Part){
+    // 判断食物是否随机出现在蛇上
+    isBody(){
         for(let i=0,len=this.tails.length;i<len;i++){
-            if(Part.X === this.tails[i].X &&
-                Part.Y === this.tails[i].Y){
+            if(food.X === this.tails[i].X &&
+                food.Y === this.tails[i].Y){
                    return true; 
                 }
         }
