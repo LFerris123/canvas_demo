@@ -22,10 +22,8 @@ class Snake{
         raf = requestAnimationFrame(function run(){
             ctx.clearRect(0,0,canvas.width,canvas.height);
             this_.update();
-            if(this.isBump()){
+            if(this_.isBump()){
                 alert(`得分为${score}`);
-                score = 0;
-                Score.innerText = score;
                 Reset.click();
                 return;
              }
