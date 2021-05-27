@@ -154,22 +154,31 @@ function addMeAndYou(){
 }
 
 // 初始化画布并生成迷宫
-function init(){
+function initCanvas(){
     ctx.clearRect(0,0,canvas.width,canvas.width);
     draw();
     disDraw();
     addMeAndYou();
 }
 
-var Maze = new Array(spacs);
-initMaze();
-var disjointSet = new DisjointSet(spacs*spacs);
-MakeMaze();
-var me = {
-    row:0,
-    column:0
+var Maze = null;
+var disjointSet = null;
+var me = null;
+
+// 初始化
+function init(){
+    Maze = new Array(spacs);
+    initMaze();
+    disjointSet = new DisjointSet(spacs*spacs);
+    MakeMaze();
+    me = {
+        row:0,
+        column:0
+    }
+    initCanvas();
 }
-init();
+
+
 
 document.addEventListener("keydown",(e)=>{
     switch(e.keyCode){
@@ -177,39 +186,31 @@ document.addEventListener("keydown",(e)=>{
             if(Maze[me.row][me.column].CanLeft){
                 me.row--;
             }
-            init();
+            initCanvas();
             break;
         case 38:
             if(Maze[me.row][me.column].CanUp){
                 me.column--;
             }
-            init();
+            initCanvas();
             break;
         case 39:
             if(Maze[me.row][me.column].CanRight){
                 me.row++;
             }
-            init();
+            initCanvas();
             break;
         case 40:
             if(Maze[me.row][me.column].CanDown){
                 me.column++;
             }
-            init();
+            initCanvas();
             break;
         default:
             break;
     }
     if(is_Win()){
         alert("成功到达终点！");
-        Maze = new Array(spacs);
-        initMaze();
-        disjointSet = new DisjointSet(spacs*spacs);
-        MakeMaze();
-        me = {
-            row:0,
-            column:0
-        }
         init();
     }
 })
