@@ -9,6 +9,15 @@ var ctx = canvas.getContext("2d");
 // 格子的大小
 var size = canvas.width/spacs;
 
+// 迷宫
+var Maze = null;
+
+// 并查集
+var disjointSet = null;
+
+// 我所处位置
+var me = null;
+
 // 画出迷宫格子
 function draw(){
     for(let i=1;i<spacs;i++){
@@ -30,7 +39,7 @@ class Cell{
         this.CanDown = false;
     }
 }
-// 迷宫 / 初始化
+// 迷宫初始化
 function initMaze(){
     for(let i=0;i<spacs;i++){
         Maze[i] = new Array(spacs);
@@ -160,10 +169,6 @@ function initCanvas(){
     disDraw();
     addMeAndYou();
 }
-
-var Maze = null;
-var disjointSet = null;
-var me = null;
 
 // 初始化
 function init(){
