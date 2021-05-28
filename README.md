@@ -7,4 +7,4 @@
 4. SNAKE贪吃蛇游戏
 5. MAZE迷宫游戏
 
-在博客中查看：https://zcy.fit/js_canvas
+在博客中查看：https://zcy.fit/tag/canvas/
