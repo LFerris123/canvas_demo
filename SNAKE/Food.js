@@ -1,8 +1,8 @@
 class Food{
     constructor(){
         // 位置
-        this.X =Math.round(Math.random()* size);
-        this.Y =Math.round(Math.random()* size);
+        this.X =Math.round(Math.random()* (size-1));
+        this.Y =Math.round(Math.random()* (size-1));
     }
 
     draw(){
