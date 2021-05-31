@@ -9,27 +9,10 @@ var ctx = canvas.getContext("2d");
 // 格子的大小
 var size = canvas.width/spacs;
 
-// 迷宫
 var Maze = null;
 
-// 并查集
 var disjointSet = null;
 
-// 我所处位置
-var me = null;
-
-// 画出迷宫格子
-function draw(){
-    for(let i=1;i<spacs;i++){
-        ctx.strokeStyle='gray';
-        ctx.moveTo(i*size,0);
-        ctx.lineTo(i*size,size*spacs);
-        ctx.stroke();
-        ctx.moveTo(0,i*size);
-        ctx.lineTo(size*spacs,i*size);
-        ctx.stroke();
-    }
-}
 // 格子 (初始化都有墙壁)
 class Cell{
     constructor(){
@@ -39,7 +22,7 @@ class Cell{
         this.CanDown = false;
     }
 }
-// 迷宫初始化
+// 迷宫 / 初始化
 function initMaze(){
     for(let i=0;i<spacs;i++){
         Maze[i] = new Array(spacs);
@@ -49,44 +32,9 @@ function initMaze(){
     }
 }
 
-// 并查集生成迷宫
-function MakeMaze(){
-    while(!disjointSet.isConnect(0,spacs*spacs-1)){
-        // 随机选中一个格子
-        let index = RamdomCell();
-        let row = index%spacs;
-        let column = Math.floor(index/spacs);
-        // 随机选中该格子相邻格子
-        let ramdomNeighbor = RamdomNeighbor(row,column);
-        // 如果连通
-        if(disjointSet.isConnect(index,ramdomNeighbor.index)) continue;
-    
-        // 去掉墙壁
-        switch(ramdomNeighbor.deraction){
-            case "左":
-                Maze[row][column].CanLeft = true;
-                Maze[ramdomNeighbor.row][ramdomNeighbor.column].CanRight = true;
-                break;
-            case "右":
-                Maze[row][column].CanRight = true;
-                Maze[ramdomNeighbor.row][ramdomNeighbor.column].CanLeft = true;
-                break;
-            case "上":
-                Maze[row][column].CanUp = true;
-                Maze[ramdomNeighbor.row][ramdomNeighbor.column].CanDown = true;
-                break;
-            case "下":
-                Maze[row][column].CanDown = true;
-                Maze[ramdomNeighbor.row][ramdomNeighbor.column].CanUp = true;
-                break;
-            default:
-                break;
-        }
-    
-        // 并查集合并
-        disjointSet.union(index,ramdomNeighbor.index);
-    }
-}
+var Maze = new Array(spacs);
+initMaze();
+var disjointSet = new DisjointSet(spacs*spacs);
 
 function RamdomCell(){
     return Math.round(Math.random()*(spacs*spacs-1));
@@ -126,6 +74,58 @@ function RamdomNeighbor(row,column){
     let ram = Math.floor(Math.random()*canTo.length);
     return canTo[ram];
 }
+// 并查集生成迷宫
+function MakeMaze(){
+    while(!disjointSet.isConnect(0,spacs*spacs-1)){
+        // 随机选中一个格子
+        let index = RamdomCell();
+        let row = index%spacs;
+        let column = Math.floor(index/spacs);
+        // 随机选中该格子相邻格子
+        let ramdomNeighbor = RamdomNeighbor(row,column);
+        // 如果连通
+        if(disjointSet.isConnect(index,ramdomNeighbor.index)) continue;
+    
+        // 去掉墙壁
+        switch(ramdomNeighbor.deraction){
+            case "左":
+                Maze[row][column].CanLeft = true;
+                Maze[ramdomNeighbor.row][ramdomNeighbor.column].CanRight = true;
+                break;
+            case "右":
+                Maze[row][column].CanRight = true;
+                Maze[ramdomNeighbor.row][ramdomNeighbor.column].CanLeft = true;
+                break;
+            case "上":
+                Maze[row][column].CanUp = true;
+                Maze[ramdomNeighbor.row][ramdomNeighbor.column].CanDown = true;
+                break;
+            case "下":
+                Maze[row][column].CanDown = true;
+                Maze[ramdomNeighbor.row][ramdomNeighbor.column].CanUp = true;
+                break;
+            default:
+                break;
+        }
+    
+        // 并查集合并
+        disjointSet.union(index,ramdomNeighbor.index);
+    }
+}
+MakeMaze();
+
+// 画出迷宫格子
+function draw(){
+    for(let i=1;i<spacs;i++){
+        ctx.strokeStyle='gray';
+        ctx.moveTo(i*size,0);
+        ctx.lineTo(i*size,size*spacs);
+        ctx.stroke();
+        ctx.moveTo(0,i*size);
+        ctx.lineTo(size*spacs,i*size);
+        ctx.stroke();
+    }
+}
 
 // 擦去墙壁
 function disDraw(){
@@ -163,27 +163,18 @@ function addMeAndYou(){
 }
 
 // 初始化画布并生成迷宫
-function initCanvas(){
+function init(){
     ctx.clearRect(0,0,canvas.width,canvas.width);
     draw();
     disDraw();
     addMeAndYou();
 }
 
-// 初始化
-function init(){
-    Maze = new Array(spacs);
-    initMaze();
-    disjointSet = new DisjointSet(spacs*spacs);
-    MakeMaze();
-    me = {
-        row:0,
-        column:0
-    }
-    initCanvas();
+var me = {
+    row:0,
+    column:0
 }
-
-
+init();
 
 document.addEventListener("keydown",(e)=>{
     switch(e.keyCode){
@@ -191,31 +182,39 @@ document.addEventListener("keydown",(e)=>{
             if(Maze[me.row][me.column].CanLeft){
                 me.row--;
             }
-            initCanvas();
+            init();
             break;
         case 38:
             if(Maze[me.row][me.column].CanUp){
                 me.column--;
             }
-            initCanvas();
+            init();
             break;
         case 39:
             if(Maze[me.row][me.column].CanRight){
                 me.row++;
             }
-            initCanvas();
+            init();
             break;
         case 40:
             if(Maze[me.row][me.column].CanDown){
                 me.column++;
             }
-            initCanvas();
+            init();
             break;
         default:
             break;
     }
     if(is_Win()){
         alert("成功到达终点！");
+        Maze = new Array(spacs);
+        initMaze();
+        disjointSet = new DisjointSet(spacs*spacs);
+        MakeMaze();
+        me = {
+            row:0,
+            column:0
+        }
         init();
     }
 })
